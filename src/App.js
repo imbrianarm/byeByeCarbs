@@ -8,16 +8,16 @@ class App extends Component {
     //SETTING OUR APP COMPONENT INITIAL STATE TO AN EMPTY 'RECIPES' ARRAY
     this.state = {
       recipes: [],
-      // isLoading: true
+      isLoading: true
     };
   }
   //WHEN APP COMPONENT IS FINALLY MOUNTED (CREATED) TO THE PAGE, CALL OUR FUNCTION
   componentDidMount() {
-    // this.getRecipes();
+    this.getRecipes();
   }
 
   //CREATING A FUNCTION THAT WILL REQUEST OUR API DATA
-  getArt = () => {
+  getRecipes = () => {
     axios({
       method: "GET",
       url: "https://api.yummly.com/v1/api/recipes",
@@ -26,25 +26,24 @@ class App extends Component {
         _app_key: "aaf99c9fd90f66999849bafbff2e01ff",
         _app_id: "ff2d06e9",
         format: "json",
-        q: "eggs",
-        maxResult: 100,
+        q: "keto",
+        maxResult: 10,
         requirePictures: true
       }
     }).then(results => {
-      //STORING OUR DESIRED DATA(ARRAY OF ART OBJECTS) IN THE RESPONSE VARIABLE - JUST TO BE CLEANER
-      // response = response.data.matches;
+      //STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESPONSE VARIABLE - JUST TO BE CLEANER
+      results = results.data.matches;
       console.log(results);
-      // UPDATE OUR EMPTY ART ARRAY FROM STATE AND FILL IT WITH THE DATA RESPONSE THAT CONTAINS THE ARRAY OF ART OBJECTS
-      // this.setState({
-      //   recipes: response
-      //   // isLoading: false
-      // });
+      // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE DATA RESPONSE THAT CONTAINS THE ARRAY OF RECIPES OBJECTS
+      this.setState({
+        recipes: results,
+        isLoading: false
+      });
     });
   };
 
   
   render() {
-    this.getArt();
     return (
       <div className="App">
         <h2>Here are some Recipes</h2>
