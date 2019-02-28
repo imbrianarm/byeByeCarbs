@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
+// import { promised } from "q";
 
 class App extends Component {
   constructor() {
@@ -16,10 +17,9 @@ class App extends Component {
   }
 
   handleChange = event => {
-    //EVENT = EVENT LISTENER, TARGET = TARGET(INPUT), VALUE=INPUT VALUE
+    // EVENT = EVENT LISTENER, TARGET = TARGET(INPUT), VALUE=INPUT VALUE
     // THE ARGUMENT PASSED TO THIS FUNCTION IS THE EVENT (A CHANGE IN THE INPUT)
     // WE SET STATE USING THAT INPUT'S NAME AND VALUE
-    // (THIS MAKES THE FUNCTION REUSABLE)
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -29,25 +29,25 @@ class App extends Component {
   handleSubmit = event => {
     //WE WANT TO PREVENT THE DEFAULT ON BUTTON SUBMIT
     event.preventDefault();
-    // WE WANT TO TAKE THIS INFO FROM STRAIGHT - NOT FROM THE EVENT LISTENER DIRECTLY
-    console.log(this.state.userInput);
+    // WE WANT TO TAKE THIS INFO FROM STATE - NOT FROM THE EVENT LISTENER DIRECTLY
+
     // THE ARGUMENT PASSED TO THIS FUNCTION IS THE EVENT (SUBMISSION OF THE FORM)
     // RESET THE STATE SO THE INPUT IS CLEARED OUT
-    this.setState({
-      userInput: "",
-      meal: "",
-      time: 0
-    });
+    // this.setState({
+    //   userInput: "",
+    //   meal: "",
+    //   time: 0
+    // });
+
+    //CALLING API FUNCTION ON FORM SUBMIT
+    this.getRecipes(this.state.userInput, this.state.meal, this.state.time);
   };
 
-  //WHEN APP COMPONENT IS FINALLY MOUNTED (CREATED) TO THE PAGE, CALL OUR FUNCTION
-  componentDidMount() {
-    this.getRecipes();
-    // this.getRecipeUrl();
-  }
+  //WHEN APP COMPONENT IS MOUNTED TO THE PAGE, CALL OUR FUNCTION
+  componentDidMount() {}
 
   //CREATING A FUNCTION THAT WILL REQUEST OUR API DATA
-  getRecipes = () => {
+  getRecipes = (userInput, meal, time) => {
     axios({
       method: "GET",
       url: "https://api.yummly.com/v1/api/recipes",
@@ -56,45 +56,54 @@ class App extends Component {
         _app_key: "aaf99c9fd90f66999849bafbff2e01ff",
         _app_id: "ff2d06e9",
         format: "json",
-        q: "keto",
+        q: "keto " + userInput,
         maxResult: 10,
         requirePictures: true,
-        maxTotalTimeInSeconds: 1800,
-        allowedCourse: "course^course-Main Dishes"
+        maxTotalTimeInSeconds: time,
+        allowedCourse: "course^course-" + meal
       }
     }).then(results => {
-      //STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESPONSE VARIABLE - JUST TO BE CLEANER
+      //STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESULTS VARIABLE - JUST TO BE CLEANER
       results = results.data.matches;
-      console.log(results);
-      // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE DATA RESPONSE THAT CONTAINS THE ARRAY OF RECIPES OBJECTS
+      //DEFINING VARIABLE THAT HOLDS RECIPE IDS FROM RESULTS TO BE PASSED INTO 2ND API CALL
+      const recipeIds = results.map(item => {
+        return item.id;
+      });
+      // DEFINE VARIABLE WHICH WILL MAP RECIPE IDS THROUGH 2ND API CALL FOR EACH RESULT RETURNED FROM 1ST API CALL
+      const recipePromises = recipeIds.map(item => {
+        return this.getRecipeUrl(item);
+      });
+      // CREATE PROMISE TO RUN 2ND API ONLY ONCE RESULTS HAVE BEEN RETURNED FROM 1ST API
+      Promise.all(recipePromises).then(values => {
+        //MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
+        const recipeUrlResults = values.map(item => {
+          return item.data.attribution;
+        });
+        // APPEND ATTRIBUTION RESULTS FROM EACH ITEM BACK TO RESULTS
+        recipeUrlResults.forEach((attributes, i) => {
+          results[i].attribution = attributes;
+        });
+      });
+
+      // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE RESULTS DATA RETURNED FROM BOTH API CALLS
       this.setState({
         recipes: results,
         isLoading: false
       });
-      console.log(this.state);
     });
   };
 
-  //CREATING A 2ND FUNCTION THAT WILL REQUEST OUR API CALL TO EXTRACT URL
+  //CREATING A 2ND API CALL FUNCTION THAT WILL REQUEST OUR API CALL TO EXTRACT URL
   getRecipeUrl = url => {
-    axios({
+    return axios({
       method: "GET",
-      url: `https://api.yummly.com/v1/api/recipe/url`,
+      url: "https://api.yummly.com/v1/api/recipe/" + url,
       dataResponse: "json",
       params: {
         _app_key: "aaf99c9fd90f66999849bafbff2e01ff",
         _app_id: "ff2d06e9",
         format: "json"
       }
-    }).then(results => {
-      //STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESPONSE VARIABLE - JUST TO BE CLEANER
-      // results = results.data.matches;
-      console.log(results);
-      // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE DATA RESPONSE THAT CONTAINS THE ARRAY OF RECIPES OBJECTS
-      this.setState({
-        // recipes: results,
-        isLoading: false
-      });
     });
   };
 
@@ -112,7 +121,7 @@ class App extends Component {
           >
             <optgroup label="Pick a Meal">
               <option value="Breakfast and Brunch">Breakfast</option>
-              <option value="Lunch and Snacks">Lunch</option>
+              <option value="Lunch">Lunch</option>
               <option value="Main Dishes">Dinner</option>
               <option value="Desserts">Desserts</option>
             </optgroup>
@@ -139,15 +148,25 @@ class App extends Component {
             type="text"
             placeholder="recipe search"
             onChange={this.handleChange}
-            // the name attribute here is used to make the handlechange method reusable
             name="userInput"
-            //we're binding the value of this input to the value that exists for it in state
-            //this is called a "controlled input"
             value={this.state.userInput}
           />
           {console.log(this.state.userInput)}
           <button type="submit">Submit</button>
         </form>
+
+        {this.state.isLoading ? (
+          <p>The Page is Loading</p>
+        ) : (
+          this.state.recipes.map(item => {
+            return (
+              // When Mapping, React REQUIRES that we provide a unique ID passed to a "key" property
+              <div key={item.id}>
+                <p>{item.recipeName}</p>
+              </div>
+            );
+          })
+        )}
       </div>
     );
   }
