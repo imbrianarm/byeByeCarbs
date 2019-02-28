@@ -82,11 +82,11 @@ class App extends Component {
         Promise.all(recipePromises).then(values => {
           //MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
           const recipeUrlResults = values.map(item => {
-            return [item.data.attribution, item.data.images];
+            return [item.data];
           });
           // APPEND ATTRIBUTION RESULTS FROM EACH ITEM BACK TO RESULTS
           recipeUrlResults.forEach((attributes, i) => {
-            results[i].attribution = attributes;
+            results[i].recipeApiResults = attributes;
           });
 
           // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE RESULTS DATA RETURNED FROM BOTH API CALL
@@ -175,9 +175,9 @@ class App extends Component {
               <Results
                 key={item.id}
                 name={item.recipeName}
-                image={item.attribution[1][0].hostedLargeUrl}
+                image={item.recipeApiResults[0].images[0].hostedLargeUrl}
                 time={item.totalTimeInSeconds}
-                url={item.attribution[0].html}
+                url={item.recipeApiResults[0].attribution.html}
               />
             );
           })
