@@ -80,7 +80,7 @@ class App extends Component {
         Promise.all(recipePromises).then(values => {
           //MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
           const recipeUrlResults = values.map(item => {
-            return item.data.attribution;
+            return [item.data.attribution, item.data.images];
           });
           // APPEND ATTRIBUTION RESULTS FROM EACH ITEM BACK TO RESULTS
           recipeUrlResults.forEach((attributes, i) => {
@@ -168,12 +168,15 @@ class App extends Component {
             return (
               <div key={item.id}>
                 <h2>{item.recipeName}</h2>
-                <img src={item.imageUrlsBySize[90]} alt={item.recipeName} />
+                <img
+                  src={item.attribution[1][0].hostedLargeUrl}
+                  alt={item.recipeName}
+                />
                 <p>
                   Total Cook/Prep Time: {item.totalTimeInSeconds / 60} minutes
                 </p>
                 <div
-                  dangerouslySetInnerHTML={{ __html: item.attribution.html }}
+                  dangerouslySetInnerHTML={{ __html: item.attribution[0].html }}
                 />
               </div>
             );
