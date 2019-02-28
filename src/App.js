@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
+import Results from "./Components/Results/Results.js";
+import Form from "./Components/Form/Form.js";
 
 class App extends Component {
   constructor() {
@@ -114,6 +116,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        {/* <Form
+          key={item.id}
+        /> */}
+
         {/* FORM FOR USER TO SELECT CRITERIA FOR API CALL */}
         <form action="submit" onSubmit={this.handleSubmit}>
           {/* ADD NAME TO SELECT ELEMENTS SO WE CAN ATTACH TO EVENT.TARGET.NAME TO NAME STATE */}
@@ -166,19 +172,13 @@ class App extends Component {
         ) : (
           this.state.recipes.map(item => {
             return (
-              <div key={item.id}>
-                <h2>{item.recipeName}</h2>
-                <img
-                  src={item.attribution[1][0].hostedLargeUrl}
-                  alt={item.recipeName}
-                />
-                <p>
-                  Total Cook/Prep Time: {item.totalTimeInSeconds / 60} minutes
-                </p>
-                <div
-                  dangerouslySetInnerHTML={{ __html: item.attribution[0].html }}
-                />
-              </div>
+              <Results
+                key={item.id}
+                name={item.recipeName}
+                image={item.attribution[1][0].hostedLargeUrl}
+                time={item.totalTimeInSeconds}
+                url={item.attribution[0].html}
+              />
             );
           })
         )}
