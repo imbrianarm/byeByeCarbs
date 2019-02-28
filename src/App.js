@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
-// import { promised } from "q";
 
 class App extends Component {
   constructor() {
@@ -11,8 +10,9 @@ class App extends Component {
       recipes: [],
       userInput: "",
       meal: "",
-      time: 0,
-      isLoading: true
+      time: "",
+      isLoading: "",
+      hasNoResults: ""
     };
   }
 
@@ -29,22 +29,18 @@ class App extends Component {
   handleSubmit = event => {
     //WE WANT TO PREVENT THE DEFAULT ON BUTTON SUBMIT
     event.preventDefault();
-    // WE WANT TO TAKE THIS INFO FROM STATE - NOT FROM THE EVENT LISTENER DIRECTLY
 
-    // THE ARGUMENT PASSED TO THIS FUNCTION IS THE EVENT (SUBMISSION OF THE FORM)
-    // RESET THE STATE SO THE INPUT IS CLEARED OUT
-    // this.setState({
-    //   userInput: "",
-    //   meal: "",
-    //   time: 0
-    // });
+    // ACTIVATE LOADING STATE UPON BUTTON CLICK
+    this.setState({
+      isLoading: true
+    });
 
     //CALLING API FUNCTION ON FORM SUBMIT
     this.getRecipes(this.state.userInput, this.state.meal, this.state.time);
   };
 
   //WHEN APP COMPONENT IS MOUNTED TO THE PAGE, CALL OUR FUNCTION
-  componentDidMount() {}
+  // componentDidMount() {}
 
   //CREATING A FUNCTION THAT WILL REQUEST OUR API DATA
   getRecipes = (userInput, meal, time) => {
@@ -65,31 +61,39 @@ class App extends Component {
     }).then(results => {
       //STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESULTS VARIABLE - JUST TO BE CLEANER
       results = results.data.matches;
-      //DEFINING VARIABLE THAT HOLDS RECIPE IDS FROM RESULTS TO BE PASSED INTO 2ND API CALL
-      const recipeIds = results.map(item => {
-        return item.id;
-      });
-      // DEFINE VARIABLE WHICH WILL MAP RECIPE IDS THROUGH 2ND API CALL FOR EACH RESULT RETURNED FROM 1ST API CALL
-      const recipePromises = recipeIds.map(item => {
-        return this.getRecipeUrl(item);
-      });
-      // CREATE PROMISE TO RUN 2ND API ONLY ONCE RESULTS HAVE BEEN RETURNED FROM 1ST API
-      Promise.all(recipePromises).then(values => {
-        //MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
-        const recipeUrlResults = values.map(item => {
-          return item.data.attribution;
+      if (results.length === 0) {
+        // ERROR HANDLING WHEN NO RESULTS RETURNED
+        this.setState({
+          hasNoResults: true,
+          isLoading: false
         });
-        // APPEND ATTRIBUTION RESULTS FROM EACH ITEM BACK TO RESULTS
-        recipeUrlResults.forEach((attributes, i) => {
-          results[i].attribution = attributes;
+      } else {
+        //DEFINING VARIABLE THAT HOLDS RECIPE IDS FROM RESULTS TO BE PASSED INTO 2ND API CALL
+        const recipeIds = results.map(item => {
+          return item.id;
         });
-      });
+        // DEFINE VARIABLE WHICH WILL MAP RECIPE IDS THROUGH 2ND API CALL FOR EACH RESULT RETURNED FROM 1ST API CALL
+        const recipePromises = recipeIds.map(item => {
+          return this.getRecipeUrl(item);
+        });
+        // CREATE PROMISE TO RUN 2ND API ONLY ONCE RESULTS HAVE BEEN RETURNED FROM 1ST API
+        Promise.all(recipePromises).then(values => {
+          //MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
+          const recipeUrlResults = values.map(item => {
+            return item.data.attribution;
+          });
+          // APPEND ATTRIBUTION RESULTS FROM EACH ITEM BACK TO RESULTS
+          recipeUrlResults.forEach((attributes, i) => {
+            results[i].attribution = attributes;
+          });
 
-      // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE RESULTS DATA RETURNED FROM BOTH API CALLS
-      this.setState({
-        recipes: results,
-        isLoading: false
-      });
+          // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE RESULTS DATA RETURNED FROM BOTH API CALL
+          this.setState({
+            recipes: results,
+            isLoading: false
+          });
+        });
+      }
     });
   };
 
@@ -110,9 +114,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        {/* FORM FOR USER TO SELECT CRITERIA FOR API CALL */}
         <form action="submit" onSubmit={this.handleSubmit}>
-          {/* ADD NAME SO WE CAN ATTACH TO EVENT.TARGET.NAME TO NAME STATE */}
-
+          {/* ADD NAME TO SELECT ELEMENTS SO WE CAN ATTACH TO EVENT.TARGET.NAME TO NAME STATE */}
           <label htmlFor="meal">Select a meal?</label>
           <select
             name="meal"
@@ -127,8 +131,6 @@ class App extends Component {
             </optgroup>
           </select>
 
-          {console.log(this.state.meal)}
-
           <label htmlFor="time">Choose Total Cook and Prep Time</label>
           <select
             name="time"
@@ -138,11 +140,9 @@ class App extends Component {
             <optgroup label="Pick a time">
               <option value="1800">Half Hour or Less</option>
               <option value="3600">One Hour or Less</option>
-              <option value="">More than One Hour</option>
+              <option value="">Any Amount of time</option>
             </optgroup>
           </select>
-
-          {console.log(this.state.time)}
 
           <input
             type="text"
@@ -151,18 +151,30 @@ class App extends Component {
             name="userInput"
             value={this.state.userInput}
           />
-          {console.log(this.state.userInput)}
+
           <button type="submit">Submit</button>
         </form>
 
+        {/* WILL DISPLAY NO SEARCH RESULTS ERROR MESSAGE */}
+        {this.state.hasNoResults && (
+          <p>Sorry there were no results. Please search again!</p>
+        )}
+
+        {/* WILL DISPLAY LOADING STATE AND THEN RENDER SEARCH RESULTS FROM THIS.STATE ONCE LOADED */}
         {this.state.isLoading ? (
-          <p>The Page is Loading</p>
+          <p>Loading...</p>
         ) : (
           this.state.recipes.map(item => {
             return (
-              // When Mapping, React REQUIRES that we provide a unique ID passed to a "key" property
               <div key={item.id}>
-                <p>{item.recipeName}</p>
+                <h2>{item.recipeName}</h2>
+                <img src={item.imageUrlsBySize[90]} alt={item.recipeName} />
+                <p>
+                  Total Cook/Prep Time: {item.totalTimeInSeconds / 60} minutes
+                </p>
+                <div
+                  dangerouslySetInnerHTML={{ __html: item.attribution.html }}
+                />
               </div>
             );
           })
