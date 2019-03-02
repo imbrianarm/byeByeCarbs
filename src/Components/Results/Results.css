@@ -1,0 +1,12 @@
+main {
+  min-height: 15vh;
+}
+
+.cardImageContainer {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.cardImage {
+  width: 100%;
+}

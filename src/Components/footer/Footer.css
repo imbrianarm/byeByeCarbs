@@ -1,0 +1,22 @@
+footer {
+  min-height: 5vh;
+  color: var(--offWhite);
+  background-color: var(--primaryColor);
+}
+
+footer .wrapper {
+  min-height: 5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer p {
+  font-size: 0.6rem;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+footer span {
+  color: var(--primaryAccent);
+}

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
-import Results from "./Components/Results/Results.js";
-import Form from "./Components/Form/Form.js";
+import Header from "./components/header/Header.js";
+import Results from "./components/results/Results.js";
+import Footer from "./components/footer/Footer.js";
 
 class App extends Component {
   constructor() {
@@ -67,7 +68,8 @@ class App extends Component {
         // ERROR HANDLING WHEN NO RESULTS RETURNED
         this.setState({
           hasNoResults: true,
-          isLoading: false
+          isLoading: false,
+          recipes: []
         });
       } else {
         //DEFINING VARIABLE THAT HOLDS RECIPE IDS FROM RESULTS TO BE PASSED INTO 2ND API CALL
@@ -76,7 +78,7 @@ class App extends Component {
         });
         // DEFINE VARIABLE WHICH WILL MAP RECIPE IDS THROUGH 2ND API CALL FOR EACH RESULT RETURNED FROM 1ST API CALL
         const recipePromises = recipeIds.map(item => {
-          return this.getRecipeUrl(item);
+          return this.getRecipeDetails(item);
         });
         // CREATE PROMISE TO RUN 2ND API ONLY ONCE RESULTS HAVE BEEN RETURNED FROM 1ST API
         Promise.all(recipePromises).then(values => {
@@ -100,7 +102,7 @@ class App extends Component {
   };
 
   //CREATING A 2ND API CALL FUNCTION THAT WILL REQUEST OUR API CALL TO EXTRACT URL
-  getRecipeUrl = url => {
+  getRecipeDetails = url => {
     return axios({
       method: "GET",
       url: "https://api.yummly.com/v1/api/recipe/" + url,
@@ -116,72 +118,42 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <Form
-          key={item.id}
-        /> */}
+        <Header
+          handleSubmit={this.handleSubmit}
+          handleChange={this.handleChange}
+          mealValue={this.state.meal}
+          timeValue={this.state.time}
+          userInputValue={this.state.userInput}
+        />
 
-        {/* FORM FOR USER TO SELECT CRITERIA FOR API CALL */}
-        <form action="submit" onSubmit={this.handleSubmit}>
-          {/* ADD NAME TO SELECT ELEMENTS SO WE CAN ATTACH TO EVENT.TARGET.NAME TO NAME STATE */}
-          <label htmlFor="meal">Select a meal?</label>
-          <select
-            name="meal"
-            value={this.state.meal}
-            onChange={this.handleChange}
-          >
-            <optgroup label="Pick a Meal">
-              <option value="Breakfast and Brunch">Breakfast</option>
-              <option value="Lunch">Lunch</option>
-              <option value="Main Dishes">Dinner</option>
-              <option value="Desserts">Desserts</option>
-            </optgroup>
-          </select>
+        <main>
+          <section className="results">
+            <div className="wrapper">
+              {/* WILL DISPLAY NO SEARCH RESULTS ERROR MESSAGE */}
+              {this.state.hasNoResults && (
+                <p>Sorry there were no results. Please search again!</p>
+              )}
 
-          <label htmlFor="time">Choose Total Cook and Prep Time</label>
-          <select
-            name="time"
-            value={this.state.time}
-            onChange={this.handleChange}
-          >
-            <optgroup label="Pick a time">
-              <option value="1800">Half Hour or Less</option>
-              <option value="3600">One Hour or Less</option>
-              <option value="">Any Amount of time</option>
-            </optgroup>
-          </select>
-
-          <input
-            type="text"
-            placeholder="recipe search"
-            onChange={this.handleChange}
-            name="userInput"
-            value={this.state.userInput}
-          />
-
-          <button type="submit">Submit</button>
-        </form>
-
-        {/* WILL DISPLAY NO SEARCH RESULTS ERROR MESSAGE */}
-        {this.state.hasNoResults && (
-          <p>Sorry there were no results. Please search again!</p>
-        )}
-
-        {/* WILL DISPLAY LOADING STATE AND THEN RENDER SEARCH RESULTS FROM THIS.STATE ONCE LOADED */}
-        {this.state.isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          this.state.recipes.map(item => {
-            return (
-              <Results
-                key={item.id}
-                name={item.recipeName}
-                image={item.recipeApiResults[0].images[0].hostedLargeUrl}
-                time={item.totalTimeInSeconds}
-                url={item.recipeApiResults[0].attribution.html}
-              />
-            );
-          })
-        )}
+              {/* WILL DISPLAY LOADING STATE AND THEN RENDER SEARCH RESULTS FROM THIS.STATE ONCE LOADED */}
+              {this.state.isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                this.state.recipes.map(item => {
+                  return (
+                    <Results
+                      key={item.id}
+                      name={item.recipeName}
+                      image={item.recipeApiResults[0].images[0].hostedLargeUrl}
+                      time={item.totalTimeInSeconds}
+                      url={item.recipeApiResults[0].attribution.url}
+                    />
+                  );
+                })
+              )}
+            </div>
+          </section>
+        </main>
+        <Footer />
       </div>
     );
   }

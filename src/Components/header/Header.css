@@ -1,0 +1,42 @@
+.headingContainer {
+  min-height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header h1,
+header h2 {
+  font-family: var(--secondaryFont);
+  font-weight: normal;
+}
+
+header h1 {
+  font-family: var(--secondaryFont);
+  color: var(--secondaryColor);
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+.bannerContainer {
+  min-height: 70vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(../../assets/background.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.bannerContainer .wrapper {
+  display: flex;
+  height: 70vh;
+}
+
+.subheadingContainer {
+  width: 40%;
+  display: flex;
+  /* align-items: center; */
+}
+
+header h2 {
+  color: var(--offWhite);
+}
