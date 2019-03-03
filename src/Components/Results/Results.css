@@ -123,12 +123,3 @@ main {
   color: var(--secondaryAccent);
   text-decoration: none;
 }
-
-/* .cardTextContainer h2 {
-  font-family: var(--secondaryFont);
-  color: var(--secondaryColor);
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  text-align: center;
-  padding-bottom: 0.5rem;
-} */

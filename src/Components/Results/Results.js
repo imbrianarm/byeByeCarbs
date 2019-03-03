@@ -5,8 +5,7 @@ const Results = props => {
   return (
     <div key={props.id} className="cardContainer">
       <div className="cardTextContainer">
-        <a href={props.url}>{props.name}</a>
-        {/* <h2>{props.name}</h2> */}
+        <a href={props.url} target="_blank">{props.name}</a>
       </div>
       <figure className="cardImageContainer">
         <img className="cardImage" src={props.image} alt={props.name} />
