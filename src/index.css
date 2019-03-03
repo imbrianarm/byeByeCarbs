@@ -5,15 +5,20 @@
 
   /* COLORS */
   --primaryColor: #252627;
-  --secondaryColor: #bb0a21;
+  --secondaryColor: #ff3030;
   --backgroundColor: #e0eeee;
-  --primaryAccent: #edd9a3;
   --secondaryAccent: #00bfff;
   --offWhite: #f8f8ff;
 }
 
 html {
   font-size: 125%;
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 100%;
+  }
 }
 
 body {

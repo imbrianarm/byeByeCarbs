@@ -31,10 +31,53 @@ header h1 {
   height: 75vh;
 }
 
+@media only screen and (max-width: 800px) {
+  .bannerContainer .wrapper {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
 .subheadingContainer {
-  width: 60%;
+  width: 50%;
   display: flex;
-  /* align-items: center; */
+}
+
+@media only screen and (max-width: 800px) {
+  .subheadingContainer {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .subheadingContainer h2 {
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .subheadingContainer h2 {
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .subheadingContainer span {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .subheadingContainer span {
+    display: inline;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .subheadingContainer span {
+    display: block;
+  }
 }
 
 header h2 {

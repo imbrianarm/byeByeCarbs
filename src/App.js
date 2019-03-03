@@ -9,7 +9,7 @@ import Footer from "./components/footer/Footer.js";
 class App extends Component {
   constructor() {
     super();
-    //SETTING OUR APP COMPONENT INITIAL STATE TO EMPTY VALUES
+    // SETTING OUR APP COMPONENT INITIAL STATE TO EMPTY VALUES
     this.state = {
       recipes: [],
       userInput: "",
@@ -21,9 +21,6 @@ class App extends Component {
   }
 
   handleChange = event => {
-    // EVENT = EVENT LISTENER, TARGET = TARGET(INPUT), VALUE=INPUT VALUE
-    // THE ARGUMENT PASSED TO THIS FUNCTION IS THE EVENT (A CHANGE IN THE INPUT)
-    // WE SET STATE USING THAT INPUT'S NAME AND VALUE
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -31,7 +28,6 @@ class App extends Component {
 
   // THIS EVENT IS FIRED EVERY TIME THE FORM IS SUBMITTED
   handleSubmit = event => {
-    //WE WANT TO PREVENT THE DEFAULT ON BUTTON SUBMIT
     event.preventDefault();
 
     // ACTIVATE LOADING STATE UPON BUTTON CLICK
@@ -39,14 +35,11 @@ class App extends Component {
       isLoading: true
     });
 
-    //CALLING API FUNCTION ON FORM SUBMIT
+    // CALLING API FUNCTION ON FORM SUBMIT
     this.getRecipes(this.state.userInput, this.state.meal, this.state.time);
   };
 
-  //WHEN APP COMPONENT IS MOUNTED TO THE PAGE, CALL OUR FUNCTION
-  // componentDidMount() {}
-
-  //CREATING A FUNCTION THAT WILL REQUEST OUR API DATA
+  // CREATING A FUNCTION THAT WILL REQUEST OUR API DATA
   getRecipes = (userInput, meal, time) => {
     axios({
       method: "GET",
@@ -57,13 +50,13 @@ class App extends Component {
         _app_id: "ff2d06e9",
         format: "json",
         q: "keto " + userInput,
-        maxResult: 100,
+        maxResult: 10,
         requirePictures: true,
         maxTotalTimeInSeconds: time,
         allowedCourse: "course^course-" + meal
       }
     }).then(results => {
-      //STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESULTS VARIABLE - JUST TO BE CLEANER
+      // STORING OUR DESIRED DATA(ARRAY OF RECIPES OBJECTS) IN THE RESULTS VARIABLE - JUST TO BE CLEANER
       results = results.data.matches;
       if (results.length === 0) {
         // ERROR HANDLING WHEN NO RESULTS RETURNED
@@ -83,7 +76,7 @@ class App extends Component {
         });
         // CREATE PROMISE TO RUN 2ND API ONLY ONCE RESULTS HAVE BEEN RETURNED FROM 1ST API
         Promise.all(recipePromises).then(values => {
-          //MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
+          // MAP OVER 2ND API RESULTS AND EXTRACT ATTRIBUTION OBJECT, WHICH CONTAINS THE INFO NEEDED
           const recipeUrlResults = values.map(item => {
             return [item.data];
           });
@@ -103,7 +96,7 @@ class App extends Component {
     });
   };
 
-  //CREATING A 2ND API CALL FUNCTION THAT WILL REQUEST OUR API CALL TO EXTRACT URL
+  // DEFINING A 2ND API CALL FUNCTION THAT WILL REQUEST OUR API CALL TO EXTRACT URL
   getRecipeDetails = url => {
     return axios({
       method: "GET",
@@ -120,6 +113,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        {/* PROPS SETUP TO TAKE USER INPUT FROM FORM FOR API CALL */}
         <Header
           handleSubmit={this.handleSubmit}
           handleChange={this.handleChange}
@@ -128,7 +122,7 @@ class App extends Component {
           userInputValue={this.state.userInput}
         />
 
-        <main>
+        <main id="main">
           <section className="results">
             <div className="wrapper">
               {/* WILL DISPLAY LOADING STATE AND THEN RENDER SEARCH RESULTS FROM THIS.STATE ONCE LOADED */}

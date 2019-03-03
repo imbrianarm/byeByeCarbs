@@ -8,6 +8,13 @@ main {
   padding: 1rem 0;
 }
 
+@media only screen and (max-width: 500px) {
+  .results .wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
+  }
+}
+
 .cardContainer {
   width: 80%;
   margin: 1rem auto;
@@ -82,7 +89,7 @@ main {
 .cardCaption a:link,
 .cardCaption a:visited {
   display: inline-block;
-  color: (var--secondaryAccent);
+  color: var(--secondaryAccent);
   padding-bottom: 1px;
   transition: text-decoration 0.2s, color 0.2s;
 }

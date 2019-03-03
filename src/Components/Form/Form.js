@@ -4,9 +4,8 @@ import "./Form.css";
 const Form = props => {
   return (
     <div key={props.id} className="formContainer">
+      {/* FORM FOR USER TO SELECT CRITERIA FOR API CALL */}
       <form action="submit" onSubmit={props.handleSubmit}>
-        {/* ADD NAME TO SELECT ELEMENTS SO WE CAN ATTACH TO EVENT.TARGET.NAME TO NAME STATE */}
-
         <input
           type="text"
           placeholder="Recipe/Ingredient search"
@@ -30,13 +29,13 @@ const Form = props => {
           </optgroup>
         </select>
 
-        <label htmlFor="time">Choose Total Cook and Prep Time</label>
+        <label htmlFor="time">Filter by Cook/Prep Time?</label>
         <select
           name="time"
           value={props.timeValue}
           onChange={props.handleChange}
         >
-          <optgroup label="Pick a time">
+          <optgroup label="Pick a cook/prep time">
             <option value="">Any Amount of time</option>
             <option value="1800">Half Hour or Less</option>
             <option value="3600">One Hour or Less</option>

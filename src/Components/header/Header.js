@@ -13,7 +13,9 @@ const Header = props => {
       <div className="bannerContainer">
         <div className="wrapper">
           <div className="subheadingContainer">
-            <h2>The Keto Recipe Finder</h2>
+            <h2>
+              The Keto <span>Recipe Finder</span>
+            </h2>
           </div>
 
           {/* FORM FOR USER TO SELECT CRITERIA FOR API CALL */}

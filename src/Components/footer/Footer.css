@@ -18,5 +18,5 @@ footer p {
 }
 
 footer span {
-  color: var(--primaryAccent);
+  color: var(--secondaryAccent);
 }
