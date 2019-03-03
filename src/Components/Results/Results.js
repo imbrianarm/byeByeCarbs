@@ -4,16 +4,20 @@ import "./Results.css";
 const Results = props => {
   return (
     <div key={props.id} className="cardContainer">
-      <h2>{props.name}</h2>
-      <div className="cardImageContainer">
-        <img className="cardImage" src={props.image} alt={props.name} />
+      <div className="cardTextContainer">
+        <h2>{props.name}</h2>
       </div>
-      <p>Total Cook/Prep Time: {props.time / 60} minutes</p>
-      <a href={props.url} target="_blank">
-        {props.name}
-      </a>{" "}
-      information powered by{" "}
-      <img alt="Yummly" src="https://static.yummly.co/api-logo.png" />
+      <figure className="cardImageContainer">
+        <img className="cardImage" src={props.image} alt={props.name} />
+        <figcaption className="cardCaption">
+          <p>Total Cook/Prep Time: {props.time / 60} minutes</p>
+          <a href={props.url} target="_blank">
+            {props.name}
+          </a>{" "}
+          information powered by{" "}
+          <img alt="Yummly" src="https://static.yummly.co/api-logo.png" />
+        </figcaption>
+      </figure>
     </div>
   );
 };

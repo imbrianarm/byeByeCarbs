@@ -3,3 +3,17 @@
   width: 80%;
   margin: 0 auto;
 }
+
+.error,
+.loading {
+  font-family: var(--secondaryFont);
+  color: var(--secondaryColor);
+  text-align: center;
+  text-transform: uppercase;
+  padding-top: 1rem;
+}
+
+.loading {
+  animation-iteration-count: infinite;
+  color: var(--secondaryAccent);
+}

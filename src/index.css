@@ -6,8 +6,9 @@
   /* COLORS */
   --primaryColor: #252627;
   --secondaryColor: #bb0a21;
+  --backgroundColor: #e0eeee;
   --primaryAccent: #edd9a3;
-  --secondaryAccent: #4b88a2;
+  --secondaryAccent: #00bfff;
   --offWhite: #f8f8ff;
 }
 
@@ -18,7 +19,7 @@ html {
 body {
   font-family: var(--primaryFont);
   color: var(--primaryColor);
-  background-color: var(--offWhite);
+  background-color: var(--backgroundColor);
   margin: 0;
   padding: 0;
 }

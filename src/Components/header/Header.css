@@ -14,12 +14,12 @@ header h2 {
 header h1 {
   font-family: var(--secondaryFont);
   color: var(--secondaryColor);
-  font-size: 2rem;
+  font-size: 3rem;
   text-transform: uppercase;
 }
 
 .bannerContainer {
-  min-height: 70vh;
+  min-height: 75vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url(../../assets/background.jpg);
   background-size: cover;
@@ -28,15 +28,17 @@ header h1 {
 
 .bannerContainer .wrapper {
   display: flex;
-  height: 70vh;
+  height: 75vh;
 }
 
 .subheadingContainer {
-  width: 40%;
+  width: 60%;
   display: flex;
   /* align-items: center; */
 }
 
 header h2 {
+  font-size: 2rem;
   color: var(--offWhite);
+  padding-top: 1rem;
 }

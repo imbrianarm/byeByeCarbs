@@ -2,11 +2,102 @@ main {
   min-height: 15vh;
 }
 
+.results .wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  padding: 1rem 0;
+}
+
+.cardContainer {
+  width: 80%;
+  margin: 1rem auto;
+}
+
+.cardImageContainer,
+.cardImageContainer::before,
+.cardImage,
+.cardCaption {
+  transition: background-image 0.5s, transform 0.5s, opacity 0.5s;
+}
+
 .cardImageContainer {
-  width: 40%;
+  width: 100%;
   margin: 0 auto;
+  position: relative;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2);
+}
+
+.cardImageContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* Solution for gradient found at https://stackoverflow.com/questions/50787210/how-to-add-gradient-overlay-to-the-img-element-with-css */
+.cardImageContainer:hover::before {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+  transform: scale(1.05);
+}
+
+.cardImageContainer:hover .cardImage {
+  transform: scale(1.05);
+}
+
+.cardImageContainer:hover .cardCaption {
+  opacity: 1;
+  transform: translate(-50%, -50%);
 }
 
 .cardImage {
   width: 100%;
+  display: block;
+  backface-visibility: hidden;
+}
+
+.cardCaption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 20%);
+  text-align: center;
+  opacity: 0;
+  color: var(--offWhite);
+  backface-visibility: hidden;
+  z-index: 10;
+}
+
+.cardCaption p,
+.cardCaption a {
+  margin-bottom: 1rem;
+}
+
+.cardCaption img {
+  margin-top: 0.25rem;
+}
+
+.cardCaption a:link,
+.cardCaption a:visited {
+  display: inline-block;
+  color: (var--secondaryAccent);
+  padding-bottom: 1px;
+  transition: text-decoration 0.2s, color 0.2s;
+}
+
+.cardCaption a:hover,
+.cardCaption a:active {
+  color: var(--primaryAccent);
+  text-decoration: none;
+}
+
+.cardTextContainer h2 {
+  font-family: var(--secondaryFont);
+  color: var(--secondaryColor);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: 0.5rem;
 }

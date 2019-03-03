@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import "./animate.css";
 import axios from "axios";
 import Header from "./components/header/Header.js";
 import Results from "./components/results/Results.js";
@@ -56,7 +57,7 @@ class App extends Component {
         _app_id: "ff2d06e9",
         format: "json",
         q: "keto " + userInput,
-        maxResult: 10,
+        maxResult: 100,
         requirePictures: true,
         maxTotalTimeInSeconds: time,
         allowedCourse: "course^course-" + meal
@@ -93,6 +94,7 @@ class App extends Component {
 
           // UPDATE OUR EMPTY RECIPES ARRAY FROM STATE AND FILL IT WITH THE RESULTS DATA RETURNED FROM BOTH API CALL
           this.setState({
+            hasNoResults: false,
             recipes: results,
             isLoading: false
           });
@@ -129,14 +131,9 @@ class App extends Component {
         <main>
           <section className="results">
             <div className="wrapper">
-              {/* WILL DISPLAY NO SEARCH RESULTS ERROR MESSAGE */}
-              {this.state.hasNoResults && (
-                <p>Sorry there were no results. Please search again!</p>
-              )}
-
               {/* WILL DISPLAY LOADING STATE AND THEN RENDER SEARCH RESULTS FROM THIS.STATE ONCE LOADED */}
               {this.state.isLoading ? (
-                <p>Loading...</p>
+                <p className="loading animated heartBeat">Loading...</p>
               ) : (
                 this.state.recipes.map(item => {
                   return (
@@ -149,6 +146,13 @@ class App extends Component {
                     />
                   );
                 })
+              )}
+
+              {/* WILL DISPLAY NO SEARCH RESULTS ERROR MESSAGE */}
+              {this.state.hasNoResults && (
+                <p className="error">
+                  Sorry there were no results. Please search again!
+                </p>
               )}
             </div>
           </section>
