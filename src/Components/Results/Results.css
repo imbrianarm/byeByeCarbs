@@ -100,11 +100,35 @@ main {
   text-decoration: none;
 }
 
-.cardTextContainer h2 {
+.cardTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardTextContainer a:link,
+.cardTextContainer a:visited {
+  font-family: var(--secondaryFont);
+  color: var(--secondaryColor);
+  font-size: 1.5rem;
+  display: inline-block;
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  margin: 0 auto;
+}
+
+.cardTextContainer a:hover,
+.cardTextContainer a:active {
+  color: var(--secondaryAccent);
+  text-decoration: none;
+}
+
+/* .cardTextContainer h2 {
   font-family: var(--secondaryFont);
   color: var(--secondaryColor);
   font-size: 1.5rem;
   text-transform: uppercase;
   text-align: center;
   padding-bottom: 0.5rem;
-}
+} */
