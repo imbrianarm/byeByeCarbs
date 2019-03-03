@@ -8,19 +8,19 @@ self.__precacheManifest = [
     "url": "/byeByeCarbs/static/js/runtime~main.ee3b9e2a.js"
   },
   {
-    "revision": "9af70309365c1adf94cd",
-    "url": "/byeByeCarbs/static/js/main.9af70309.chunk.js"
+    "revision": "81a9d4c17ebbdf7dd4ac",
+    "url": "/byeByeCarbs/static/js/main.81a9d4c1.chunk.js"
   },
   {
     "revision": "991086699ed136b9d3af",
     "url": "/byeByeCarbs/static/js/2.99108669.chunk.js"
   },
   {
-    "revision": "9af70309365c1adf94cd",
-    "url": "/byeByeCarbs/static/css/main.adbc3013.chunk.css"
+    "revision": "81a9d4c17ebbdf7dd4ac",
+    "url": "/byeByeCarbs/static/css/main.4544deaa.chunk.css"
   },
   {
-    "revision": "f7a67fb97760d4db04474c81bb537919",
+    "revision": "9e565c3d2b7e3592b2685084280c4079",
     "url": "/byeByeCarbs/index.html"
   }
 ];
