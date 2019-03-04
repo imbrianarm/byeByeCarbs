@@ -7,7 +7,7 @@ const Header = props => {
     <header className="header">
       <div className="wrapper">
         <div className="headingContainer">
-          <h1>Food App</h1>
+          <h1 className="animated pulse">Food App</h1>
         </div>
       </div>
       <div className="bannerContainer">

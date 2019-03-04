@@ -16,6 +16,7 @@ header h1 {
   color: var(--secondaryColor);
   font-size: 3rem;
   text-transform: uppercase;
+  animation-iteration-count: infinite;
 }
 
 .bannerContainer {
